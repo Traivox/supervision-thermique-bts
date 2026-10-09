@@ -91,6 +91,6 @@ Salle COPERNIC          Salle FAURIEL
 
 | Niveau | Température | Action |
 |---|---|---|
-| Normal |  <27 °C | Aucune |
-| Avertissement | 28 – 34 °C | Alerte visuelle dans la page |
-| Critique | > 35 °C | Alerte visuelle + email au service informatique |
+| Normal | T < 27 °C | Aucune |
+| Avertissement | 27 °C ≤ T < 35 °C | Alerte visuelle dans la page |
+| Critique | T ≥ 35 °C | Alerte visuelle + email au service informatique |
