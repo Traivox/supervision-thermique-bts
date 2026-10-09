@@ -1,0 +1,19 @@
+# Fichier de travail Word (brouillon), non versionne
+*.docx
+~$*
+.~lock.*
+
+# Temporaires et système
+*~
+*.swp
+.DS_Store
+Thumbs.db
+
+# Compilations / binaires
+*.o
+*.bin
+*.elf
+
+# Outils JetBrains
+.idea/
+.vscode/
