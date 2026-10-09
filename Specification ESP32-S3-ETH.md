@@ -168,7 +168,7 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
 | 08 | `WIFI_StaticIP` | IP statique en Wi-Fi |
 | 09 | `WIFI_Web_CAM` | Serveur caméra temps réel sur Wi-Fi |
 | **10** | **`ETH_DHCP`** | **Obtention d'IP par DHCP en Ethernet — base de notre projet** |
-| **11** | **`ETH_StaticIP`** | **IP statique en Ethernet — recommandé pour CheckMK** |
+| **11** | **`ETH_StaticIP`** | **IP statique en Ethernet — indispensable pour la supervision MQTT** |
 | **12** | **`ETH_MAC_DHCP_StaticIP`** | **MAC personnalisée + repli IP statique (`192.168.1.177`) — robuste en production** |
 | 13 | `ETH_Web_CAM` | Serveur caméra sur Ethernet |
 
@@ -204,32 +204,63 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
  Salle COPERNIC                        Salle FAURIEL
  ┌────────────────────┐                ┌────────────────────┐
  │ ESP32-S3-ETH #1    │                │ ESP32-S3-ETH #2    │
- │ Capteur DS18B20    │                │ Capteur DS18B20    │
+ │ DS18B20 ×2         │                │ DS18B20 ×2         │
  │ (GPIO17, 1-Wire)   │                │ (GPIO17, 1-Wire)   │
  │ IP : 192.168.1.11  │                │ IP : 192.168.1.12  │
+ │ Client MQTT        │                │ Client MQTT        │
  └─────────┬──────────┘                └─────────┬──────────┘
-           │ Ethernet (W5500)                    │
+           │ Ethernet (W5500) · PUBLISH MQTT      │
            └────────────────┬────────────────────┘
                             ▼
-                  ┌──────────────────┐
-                  │ Serveur CheckMK  │
-                  └──────────────────┘
+                  ┌──────────────────────────────┐
+                  │ Serveur de supervision       │
+                  │  ┌─────────────────┐          │
+                  │  │ Broker MQTT     │          │
+                  │  │ Mosquitto       │          │
+                  │  │ TCP 1883 / WS   │          │
+                  │  └────────┬────────┘          │
+                  │           ▼                   │
+                  │  ┌─────────────────┐          │
+                  │  │ Page Web de     │          │
+                  │  │ supervision     │          │
+                  │  └───┬─────────┬───┘          │
+                  └──────┼─────────┼─────────────┘
+                         ▼         ▼
+                ┌────────────┐  ┌──────────────┐
+                │ Alerte     │  │ Écran bureau │
+                │ email      │  │ informatique │
+                └────────────┘  └──────────────┘
 ```
 
-**Pourquoi cette carte plutôt qu'un capteur réseau dédié ?**
+> **Note d’architecture :** la supervision repose désormais sur une **page Web de supervision** alimentée par **MQTT** (broker Mosquitto). Il n’y a **plus de serveur CheckMK** et le protocole **SNMP n’est pas utilisé**. Le firewall assure le cloisonnement du VLAN Supervision entre le réseau des salles serveurs et le réseau du bureau informatique.
 
-- Ethernet **filaire** : indispensable en salle serveur (le Wi-Fi n'est pas retenu en zone critique).
-- **Coût** bien inférieur à un capteur industriel SNMP (± 30 € contre plusieurs centaines).
-- **Doubleusage** : Ethernet + Wi-Fi de secours, OLED via carte Pico d'extension, LED RGB d'alerte locale.
-- **8 Mo de PSRAM** : largement suffisant pour un tampon d'historique et un serveur HTTP embarqué.
+**Pourquoi cette carte plutôt qu’un capteur réseau dédié ?**
+
+- Ethernet **filaire** : indispensable en salle serveur (le Wi-Fi n’est pas retenu en zone critique).
+- **Coût** bien inférieur à un capteur industriel avec agent de supervision (± 30 € contre plusieurs centaines).
+- **Doubleusage** : Ethernet + Wi-Fi de secours, OLED via carte Pico d’extension, LED RGB d’alerte locale.
+- **8 Mo de PSRAM** : largement suffisant pour un tampon d’historique et la pile réseau (Ethernet W5500 + client MQTT).
 
 ### 7.2 Chaîne de fonctionnement
 
 1. Le **DS18B20** mesure la température et la transmet sur le bus 1-Wire au microcontrôleur.
-2. L'ESP32 lit la valeur, la met en forme et l'expose via **SNMP** ou un **serveur HTTP** embarqué.
-3. **CheckMK** interrogue périodiquement l'objet (adresse IP fixe).
-4. CheckMK compare à ses seuils et déclenche l'**alerte email** au service informatique.
-5. Un **tableau de bord CheckMK** (affiché sur l'écran du bureau) présente les 4 températures en permanence.
+2. L’ESP32 lit la valeur toutes les minutes, la met en forme en **JSON** et la **publie en MQTT** (QoS 1, retain) vers le broker Mosquitto, sur le topic `temperature/<salle>/<capteur>`.
+3. Le **broker Mosquitto** reçoit le message, le conserve grâce au drapeau **retain** et le distribue à ses abonnés.
+4. La **page Web de supervision**, connectée au broker en **WebSocket** (port 9001), reçoit le message, le compare à ses **règles de seuil** et met à jour l’affichage.
+5. En cas de température **critique**, la page Web déclenche l’**alerte email** au service informatique.
+6. Un **tableau de bord Web** (affiché sur l’écran du bureau informatique) présente en permanence les 4 températures, l’état `online`/`offline` de chaque carte et l’historique.
+
+Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement>` (`offline`) permet à la page Web de signaler immédiatement la perte de connexion d’un capteur.
+
+**Bibliothèques Arduino à ajouter côté ESP32 :**
+
+| Bibliothèque | Rôle |
+|---|---|
+| `OneWire` | Pilotage du bus 1-Wire (DS18B20) |
+| `DallasTemperature` | Lecture et conversion de la température |
+| `PubSubClient` | Client MQTT (publication) |
+| `ArduinoJson` | Sérialisation des messages JSON |
+| `Ethernet` | Connexion au réseau via W5500 |
 
 ### 7.3 Cahier des charges technique du capteur
 
@@ -240,7 +271,7 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
 | Précision | ± 0,5 °C (0 °C à +85 °C) |
 | Périodicité d'échantillonnage | 1 minute *(à valider)* |
 | Communication | Ethernet filaire 10/100 Mbps, IP fixe |
-| Protocole de supervision | SNMP v2c ou agent HTTP CheckMK |
+| Protocole de supervision | **MQTT 3.1.1** (TCP 1883) ; WebSocket 9001 pour la page Web |
 | Alimentation | 5 V USB Type-C, ou module PoE IEEE 802.3af |
 | Encombrement | Format carte de développement (*cf. image de dimensions Waveshare*) |
 
@@ -253,6 +284,17 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
 | Second point de mesure | T2 (arrière salle) — à confirmer | T4 (arrière salle) — à confirmer |
 
 > **À valider :** la spécification du cahier des charges exige **au moins deux points de mesure par salle**. Une carte ne gérant qu'un seul bus 1-Wire ne peut couvrir ce besoin qu'avec deux capteurs sur le même bus (adressage par identifiant 8 bits, câblage en parallèle sur GPIO17 + 4,7 kΩ). À défaut, il faut **2 cartes par salle (soit 4 au total)**.
+
+### 7.5 Adressage réseau du projet
+
+| Équipement | Adresse IP | VLAN |
+|---|---|---|
+| ESP32-S3-ETH #1 (Copernic) | 192.168.1.11 | Supervision |
+| ESP32-S3-ETH #2 (Fauriel) | 192.168.1.12 | Supervision |
+| Serveur de supervision (Mosquitto + page Web) | 192.168.1.10 | Supervision |
+| Poste du bureau informatique | Via DHCP | Bureau |
+
+> Les trois équipements de supervision sont sur le même VLAN, séparé du réseau du bureau informatique par le firewall. Le broker Mosquitto n'accepte les connexions que sur ce VLAN (port 1883 en TCP, 9001 en WebSocket).
 
 ---
 
