@@ -3,7 +3,7 @@
 **Projet :** Supervision thermique des salles serveurs
 **Établissement :** Copernic / Fauriel
 **Auteur :** Noah THEVENON
-**Date :** 11/02/2026 — V1.0
+**Date :** 11/02/2026 — V1.1 (architecture MQTT alignée sur le cahier des charges)
 **Source :** [docs.waveshare.com/ESP32-S3-ETH](https://docs.waveshare.com/ESP32-S3-ETH)
 
 ---
@@ -221,18 +221,21 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
                   │  └────────┬────────┘          │
                   │           ▼                   │
                   │  ┌─────────────────┐          │
-                  │  │ Page Web de     │          │
-                  │  │ supervision     │          │
+                  │  │ Collecteur MQTT │          │
+                  │  │ seuils + BDD    │          │
                   │  └───┬─────────┬───┘          │
                   └──────┼─────────┼─────────────┘
                          ▼         ▼
                 ┌────────────┐  ┌──────────────┐
-                │ Alerte     │  │ Écran bureau │
-                │ email      │  │ informatique │
+                │ Alerte     │  │ Page Web de  │
+                │ email      │  │ supervision  │
+                │ (SMTP)     │  │ + écran      │
                 └────────────┘  └──────────────┘
 ```
 
 > **Note d’architecture :** la supervision repose désormais sur une **page Web de supervision** alimentée par **MQTT** (broker Mosquitto). Il n’y a **plus de serveur CheckMK** et le protocole **SNMP n’est pas utilisé**. Le firewall assure le cloisonnement du VLAN Supervision entre le réseau des salles serveurs et le réseau du bureau informatique.
+>
+> **Traitement des seuils :** l’application des règles de seuil et l’envoi de l’email sont réalisés par le **collecteur MQTT du serveur**, et non par le navigateur. L’alerte est donc émise même si l’écran du bureau informatique est éteint, et aucun doublon d’email n’est possible.
 
 **Pourquoi cette carte plutôt qu’un capteur réseau dédié ?**
 
@@ -246,9 +249,9 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
 1. Le **DS18B20** mesure la température et la transmet sur le bus 1-Wire au microcontrôleur.
 2. L’ESP32 lit la valeur toutes les minutes, la met en forme en **JSON** et la **publie en MQTT** (QoS 1, retain) vers le broker Mosquitto, sur le topic `temperature/<salle>/<capteur>`.
 3. Le **broker Mosquitto** reçoit le message, le conserve grâce au drapeau **retain** et le distribue à ses abonnés.
-4. La **page Web de supervision**, connectée au broker en **WebSocket** (port 9001), reçoit le message, le compare à ses **règles de seuil** et met à jour l’affichage.
-5. En cas de température **critique**, la page Web déclenche l’**alerte email** au service informatique.
-6. Un **tableau de bord Web** (affiché sur l’écran du bureau informatique) présente en permanence les 4 températures, l’état `online`/`offline` de chaque carte et l’historique.
+4. Le **collecteur MQTT** du serveur (abonné à `temperature/#` et `statut/#`) reçoit le message, l’**écrit dans la base de données** (historique) et le **compare aux règles de seuil**.
+5. En cas de température **critique**, le collecteur déclenche l’**alerte email** au service informatique via la passerelle mail (SMTP) et republie une alerte sur le topic `alerte/temperature`.
+6. La **page Web de supervision**, connectée au broker en **WebSocket** (port 9001), reçoit le message en temps réel et affiche les 4 températures, l’état `online`/`offline` de chaque carte et l’historique (lu en base). Elle **n’envoie aucun email** : l’alerte est déjà traitée par le collecteur.
 
 Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement>` (`offline`) permet à la page Web de signaler immédiatement la perte de connexion d’un capteur.
 
@@ -315,5 +318,12 @@ Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement
 
 ## 9. Documents liés
 
-- `Cahier des charges capteur de température.md` — cadrage du besoin
-- `Synoptique.drawio` — synoptique général du système
+- `Cahier des charges capteur de température.md` — cadrage du besoin, périmètre et synoptique
+- `schemas/5.1-chaine-fonctionnelle.drawio` — synoptique général du système
+- `schemas/5.2-cablage-ds18b20.drawio` — câblage DS18B20 / ESP32-S3-ETH (GPIO17)
+- `schemas/5.3-architecture-logicielle.drawio` — architecture logicielle du serveur de supervision
+- `schemas/5.4-implantation-sites.drawio` — implantation des sites Copernic et Fauriel
+- `schemas/5.5-serveur-web.drawio` — pile serveur Web (Apache2 / PHP-FPM / BDD)
+- `schemas/5.6-cas-utilisation.drawio` — diagramme de cas d'utilisation
+
+> Tous les schémas sont modifiables avec [app.diagrams.net](https://app.diagrams.net) ou l’extension VS Code *Draw.io Integration*.

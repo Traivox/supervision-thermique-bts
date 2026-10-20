@@ -1,0 +1,87 @@
+<mxfile host="app.diagrams.net" agent="opencode" type="device" version="24.7.17">
+  <diagram id="cablage-ds18b20" name="Câblage DS18B20">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="680" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="titre" value="CÂBLAGE DU CAPTEUR DS18B20 SUR L'ESP32-S3-ETH" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="noteArch" value="Bus 1-Wire — GPIO17 — pull-up 4,7 kΩ vers 3,3 V" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="900" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ds" value="DS18B20&#10;TO-92 — sonde de température&#10;plage −55 °C à +125 °C&#10;précision ± 0,5 °C" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="120" y="150" width="230" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_gnd" value="GND" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="365" y="165" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_vcc" value="VCC" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="365" y="225" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_dq" value="DQ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="365" y="285" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="esp" value="ESP32-S3-ETH (Waveshare)&#10;ESP32-S3R8 + W5500&#10;alimentation 5 V USB Type-C&#10;tension des GPIO : 3,3 V" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="150" width="250" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_gnd2" value="GND" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="620" y="165" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_3v3" value="3V3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="620" y="225" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pin_gpio" value="GPIO17" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;fontStyle=1;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="620" y="285" width="60" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="w_gnd" value="fil noir — GND" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#000000;strokeWidth=2;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="pin_gnd" target="pin_gnd2">
+          <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="w_vcc" value="fil rouge — 3,3 V" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#B85450;strokeWidth=2;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="pin_vcc" target="pin_3v3">
+          <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-12" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="w_dq1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#D6B656;strokeWidth=2;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="pin_dq" target="res">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="w_dq2" value="fil jaune — DATA (bus 1-Wire)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#D6B656;strokeWidth=2;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="res" target="pin_gpio">
+          <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="16" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="res" value="4,7 kΩ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D6B656;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="275" width="70" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="w_pullup" value="pull-up 4,7 kΩ" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=none;strokeColor=#D6B656;strokeWidth=2;fontSize=10;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="res" target="pin_3v3">
+          <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="-70" y="0" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="j1" value="" style="ellipse;html=1;fillColor=#D6B656;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="547" y="295" width="8" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="j2" value="" style="ellipse;html=1;fillColor=#B85450;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="511" y="234" width="8" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="note_res" value="La résistance de tirage 4,7 kΩ est IMPÉRATIVE : sans elle, le bus 1-Wire ne fonctionne pas." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="470" y="335" width="330" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tbl" value="FIL              COULEUR   BROCHE ESP32   RÔLE&#10;3,3 V           Rouge     3V3           Alimentation du capteur&#10;GND             Noir      GND           Référence de tension&#10;DATA            Jaune     GPIO17        Bus 1-Wire (données + retour)&#10;Pull-up         —         3V3 → GPIO17  Résistance 4,7 kΩ obligatoire" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;dashed=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=4;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="120" y="400" width="830" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="enc" value="ENCADREMENT" style="text;html=1;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="120" y="525" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="enc_txt" value="• 1 à 2 capteurs DS18B20 en parallèle sur le même bus 1-Wire (GPIO17 + 4,7 kΩ).&#10;• Les capteurs sont distingués par leur adresse ROM unique de 64 bits (code de famille 0x28).&#10;• Longueur de câblage recommandée : &lt; 5 m ; le DATA doit être câblé avec un fil de retour (blindé).&#10;• Broche GPIO17 libre sur la carte (cf. Specification ESP32-S3-ETH.md §4.3) — ne pas utiliser GPIO0 (bouton BOOT)." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="120" y="550" width="830" height="80" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" agent="opencode" type="device" version="24.7.17">
+  <diagram id="implantation-sites" name="Implantation des sites">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="570" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="titre" value="IMPLANTATION DES SITES — BÂTIMENTS COPERNIC ET FAURIEL" style="text;html=1;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="noteArch" value="Deux établissements distincts, une liaison réseau inter-sites d'environ 2 km" style="text;html=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="900" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="cop" value="BÂTIMENT COPERNIC — 2 rue Copernic (IRUP)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;dashed=1;verticalAlign=top;fontSize=13;fontStyle=1;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="420" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="c_dsi" value="Bureau DSI&#10;2ᵉ étage&#10;écran de supervision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="135" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c_sm" value="Salle machine&#10;2ᵉ étage&#10;switch + firewall + VM&#10;serveur de supervision" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="135" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c_013" value="Salle 0-13" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="70" y="255" width="160" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="fau" value="BÂTIMENT FAURIEL — 2ᵉ étage (ISTP)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;dashed=1;verticalAlign=top;fontSize=13;fontStyle=1;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="540" y="90" width="420" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="f_sm" value="Salle machine&#10;Aile B&#10;1 baie serveur + 2 baies switch&#10;ESP32-S3-ETH #2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="135" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="f_dsi" value="Bureau DSI&#10;Aile A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="790" y="135" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ed_link" value="Liaison réseau inter-sites ~2 km (Ethernet)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#D6B656;fontSize=11;fontStyle=1;" edge="1" parent="1" source="c_sm" target="f_sm">
+          <mxGeometry relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_lbl" value="Serveur de supervision&#10;192.168.1.10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;dashed=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=4;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="300" y="350" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f_lbl" value="ESP32-S3-ETH #2&#10;192.168.1.12" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;dashed=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=4;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="570" y="350" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="Le firewall et le serveur de supervision sont hébergés dans la salle machine du bâtiment Copernic :&#10;l'ESP32 de Fauriel accède au broker MQTT par la liaison inter-sites." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="900" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="Poste du bureau informatique : accès à la page Web de supervision via le réseau du bureau (VLAN Bureau),&#10;après authentification (Apache2 + sessions PHP)." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#1F3864;" vertex="1" parent="1">
+          <mxGeometry x="40" y="490" width="900" height="50" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
