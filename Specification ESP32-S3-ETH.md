@@ -111,8 +111,8 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
 
 | Broche | Disponibilité | Usage recommandé |
 |---|---|---|
-| **GPIO17** | Libre | **1-Wire (DS18B20)** — avec résistance de tirage 4,7 kΩ vers 3,3 V |
-| **GPIO16** | Libre | 1-Wire secondaire / 2ᵉ capteur (bus multi-capteurs en parallèle) |
+| **GPIO16** | Libre | **1-Wire (DS18B20)** — avec résistance de tirage 4,7 kΩ vers 3,3 V |
+| **GPIO17** | Libre | 1-Wire secondaire / 2ᵉ capteur (bus multi-capteurs en parallèle) |
 | **GPIO43 / GPIO44** | Libres | Bus I²C (capteur MIMO, AHT20, BME280…) |
 | GPIO0 | Libre mais câblée au bouton BOOT | À éviter (risque d'extinction de la carte) |
 | GPIO4-7 | Libres si pas de carte TF | SPI (capteur type MAX6675) |
@@ -205,7 +205,7 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
  ┌────────────────────┐                ┌────────────────────┐
  │ ESP32-S3-ETH #1    │                │ ESP32-S3-ETH #2    │
  │ DS18B20 ×2         │                │ DS18B20 ×2         │
- │ (GPIO17, 1-Wire)   │                │ (GPIO17, 1-Wire)   │
+ │ (GPIO16, 1-Wire)   │                │ (GPIO16, 1-Wire)   │
  │ IP : 192.168.1.11  │                │ IP : 192.168.1.12  │
  │ Client MQTT        │                │ Client MQTT        │
  └─────────┬──────────┘                └─────────┬──────────┘
@@ -233,7 +233,7 @@ const int gpio_pin[] = { 21, 17, 16, 18, 15, 3, 2, 1, 0, 44,  43, 38, 39, 40, 41
                 └────────────┘  └──────────────┘
 ```
 
-> **Note d’architecture :** la supervision repose désormais sur une **page Web de supervision** alimentée par **MQTT** (broker Mosquitto). Il n’y a **plus de serveur CheckMK** et le protocole **SNMP n’est pas utilisé**. Le firewall assure le cloisonnement du VLAN Supervision entre le réseau des salles serveurs et le réseau du bureau informatique.
+> **Note d’architecture :** la supervision repose sur une **page Web de supervision** alimentée par **MQTT** (broker Mosquitto). Le firewall assure le cloisonnement du VLAN Supervision entre le réseau des salles serveurs et le réseau du bureau DSI. Le serveur de supervision est une **VM Debian installée dans la salle machine de Fauriel** (aile B), joignable depuis Copernic par la liaison Ethernet inter-sites (~2 km).
 >
 > **Traitement des seuils :** l’application des règles de seuil et l’envoi de l’email sont réalisés par le **collecteur MQTT du serveur**, et non par le navigateur. L’alerte est donc émise même si l’écran du bureau informatique est éteint, et aucun doublon d’email n’est possible.
 
@@ -286,7 +286,7 @@ Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement
 | Capteur | T1 (entrée salle) | T3 (entrée salle) |
 | Second point de mesure | T2 (arrière salle) — à confirmer | T4 (arrière salle) — à confirmer |
 
-> **À valider :** la spécification du cahier des charges exige **au moins deux points de mesure par salle**. Une carte ne gérant qu'un seul bus 1-Wire ne peut couvrir ce besoin qu'avec deux capteurs sur le même bus (adressage par identifiant 8 bits, câblage en parallèle sur GPIO17 + 4,7 kΩ). À défaut, il faut **2 cartes par salle (soit 4 au total)**.
+> **À valider :** la spécification du cahier des charges exige **au moins deux points de mesure par salle**. Une carte ne gérant qu'un seul bus 1-Wire ne peut couvrir ce besoin qu'avec deux capteurs sur le même bus (adressage par identifiant 8 bits, câblage en parallèle sur GPIO16 + 4,7 kΩ). À défaut, il faut **2 cartes par salle (soit 4 au total)**.
 
 ### 7.5 Adressage réseau du projet
 
@@ -320,10 +320,11 @@ Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement
 
 - `Cahier des charges capteur de température.md` — cadrage du besoin, périmètre et synoptique
 - `schemas/5.1-chaine-fonctionnelle.drawio` — synoptique général du système
-- `schemas/5.2-cablage-ds18b20.drawio` — câblage DS18B20 / ESP32-S3-ETH (GPIO17)
+- `schemas/5.2-cablage-ds18b20.drawio` — câblage DS18B20 / ESP32-S3-ETH (GPIO16)
 - `schemas/5.3-architecture-logicielle.drawio` — architecture logicielle du serveur de supervision
 - `schemas/5.4-implantation-sites.drawio` — implantation des sites Copernic et Fauriel
 - `schemas/5.5-serveur-web.drawio` — pile serveur Web (Apache2 / PHP-FPM / BDD)
 - `schemas/5.6-cas-utilisation.drawio` — diagramme de cas d'utilisation
+- `images/recto.jpg` / `images/verso.jpg` — croquis de travail manuscrits (implantation, architecture, cas d'utilisation)
 
 > Tous les schémas sont modifiables avec [app.diagrams.net](https://app.diagrams.net) ou l’extension VS Code *Draw.io Integration*.

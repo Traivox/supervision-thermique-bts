@@ -63,14 +63,17 @@
         </mxCell>
         <mxCell id="r6" value="« hérite »" style="endArrow=none;html=1;dashed=1;fontSize=10;fontStyle=2;strokeColor=#666666;" edge="1" parent="1" source="adm" target="usr">
           <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="55" y="0" />
           </mxGeometry>
         </mxCell>
         <mxCell id="r7" value="« include »" style="endArrow=none;html=1;dashed=1;fontSize=10;fontStyle=2;strokeColor=#666666;" edge="1" parent="1" source="uc1" target="uc3">
           <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-14" />
           </mxGeometry>
         </mxCell>
         <mxCell id="r8" value="« include »" style="endArrow=none;html=1;dashed=1;fontSize=10;fontStyle=2;strokeColor=#666666;" edge="1" parent="1" source="uc2" target="uc3">
           <mxGeometry relative="1" as="geometry">
+          <mxPoint as="offset" x="0" y="-14" />
           </mxGeometry>
         </mxCell>
         <mxCell id="note1" value="« Gérer utilisateurs » et « Gérer seuils » incluent « S'authentifier ».&#10;L'admin hérite de l'acteur User : il peut aussi consulter le dashboard.&#10;« Collecter données » est réalisé par le collecteur MQTT serveur, pas par le navigateur." style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontColor=#1F3864;" vertex="1" parent="1">
