@@ -325,6 +325,5 @@ Un **Last Will and Testament** publié par chaque ESP32 sur `statut/<équipement
 - `schemas/5.4-implantation-sites.drawio` — implantation des sites Copernic et Fauriel
 - `schemas/5.5-serveur-web.drawio` — pile serveur Web (Apache2 / PHP-FPM / BDD)
 - `schemas/5.6-cas-utilisation.drawio` — diagramme de cas d'utilisation
-- `images/recto.jpg` / `images/verso.jpg` — croquis de travail manuscrits (implantation, architecture, cas d'utilisation)
 
 > Tous les schémas sont modifiables avec [app.diagrams.net](https://app.diagrams.net) ou l’extension VS Code *Draw.io Integration*.

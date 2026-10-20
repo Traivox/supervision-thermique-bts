@@ -7,7 +7,7 @@
 | **Projet** | Supervision thermique des salles serveurs |
 | **Porteurs** | Établissements IRUP (bâtiment Copernic) et ISTP (bâtiment Fauriel) |
 | **Auteur** | Étudiants — BTS CIEL 2025 |
-| **Documents liés** | [Spécification ESP32-S3-ETH](./Specification%20ESP32-S3-ETH.md) · [Schémas Draw.io](./schemas/) · [Croquis de travail](./images/) |
+| **Documents liés** | [Spécification ESP32-S3-ETH](./Specification%20ESP32-S3-ETH.md) · [Schémas Draw.io](./schemas/) |
 
 ---
 
@@ -101,7 +101,9 @@ Le système devra :
 
 > **Principe retenu :** la supervision repose sur une **page Web de supervision dédiée**, alimentée par **MQTT** (broker Mosquitto), avec un traitement des seuils et l'envoi des alertes **réalisés côté serveur** (collecteur) : l'alerte est donc émise même si l'écran du bureau DSI est éteint.
 
-Tous les schémas sont éditables dans [`schemas/`](./schemas/) (fichiers `.drawio`, à ouvrir avec [app.diagrams.net](https://app.diagrams.net) ou l'extension VS Code *Draw.io Integration*). Des **aperçus PNG** sont disponibles dans [`schemas/apercus/`](./schemas/apercus/). Les **croquis de travail manuscrits** sont conservés dans [`images/`](./images/) et intégrés ci-dessous.
+Tous les schémas sont éditables dans [`schemas/`](./schemas/) (fichiers `.drawio`, à ouvrir avec [app.diagrams.net](https://app.diagrams.net) ou l'extension VS Code *Draw.io Integration*). Des **aperçus PNG** sont disponibles dans [`schemas/apercus/`](./schemas/apercus/).
+
+> Les schémas ci-dessous sont la **reprise normalisée** des croquis de travail réalisés à la main (plan des bâtiments, architecture du serveur, cas d'utilisation) : les documents `.drawio` constituent la version de référence, modifiable et exploitable telle quelle.
 
 ### 5.1 Chaîne fonctionnelle
 
@@ -184,10 +186,6 @@ Le nœud de mesure ESP32-S3-ETH peut embarquer 1 à 2 capteurs DS18B20 en parall
 > **Pourquoi GPIO16 ?** La broche est **libre** sur la carte et n'est ni utilisée par le contrôleur Ethernet W5500, ni par la carte TF, ni par l'interface caméra — cf. [Spécification ESP32-S3-ETH](./Specification%20ESP32-S3-ETH.md) §4.3.
 
 ### 5.3 Architecture logique du serveur de supervision
-
-📸 **Croquis de travail manuscrit (verso) :** le schéma réalisé à la main a servi de base à la version normalisée ci-dessous.
-
-![Croquis manuscrit — architecture et cas d'utilisation](./images/verso.jpg)
 
 ```mermaid
 flowchart LR
@@ -302,10 +300,6 @@ Les règles de seuil sont appliquées **par le collecteur**, à réception de ch
 
 ### 5.8 Implantation des sites
 
-📸 **Croquis de travail manuscrit (recto)** — plan des deux bâtiments et de la liaison réseau :
-
-![Croquis manuscrit — plan d'implantation des bâtiments](./images/recto.jpg)
-
 ```mermaid
 flowchart LR
     subgraph COP["🏢 Bâtiment Copernic — 2 rue Copernic (IRUP)"]
@@ -353,10 +347,6 @@ flowchart LR
 ![Serveur Web](./schemas/apercus/5.5-serveur-web.png)
 
 ### 5.10 Diagramme de cas d'utilisation
-
-📸 **Croquis de travail manuscrit (verso, partie basse)** — diagramme de cas d'utilisation réalisé à la main :
-
-![Croquis manuscrit — cas d'utilisation](./images/verso.jpg)
 
 ```mermaid
 flowchart LR
