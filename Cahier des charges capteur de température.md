@@ -6,7 +6,7 @@
 |---|---|
 | **Projet** | Supervision thermique des salles serveurs |
 | **Porteurs** | Établissements IRUP (bâtiment Copernic) et ISTP (bâtiment Fauriel) |
-| **Auteur** | Noah THEVENON — BTS CIEL 2026 |
+| **Auteur** | Noah THEVENON — BTS CIEL 2025 |
 | **Documents liés** | [Spécification ESP32-S3-ETH](./Specification%20ESP32-S3-ETH.md) · [Schémas Draw.io](./schemas/) |
 
 ---
