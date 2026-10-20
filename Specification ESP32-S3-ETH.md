@@ -2,7 +2,7 @@
 
 **Projet :** Supervision thermique des salles serveurs
 **Établissement :** Copernic / Fauriel
-**Auteur :** Noah THEVENON
+**Auteur :** Étudiants
 **Date :** 11/02/2026 — V1.1 (architecture MQTT alignée sur le cahier des charges)
 **Source :** [docs.waveshare.com/ESP32-S3-ETH](https://docs.waveshare.com/ESP32-S3-ETH)
 
