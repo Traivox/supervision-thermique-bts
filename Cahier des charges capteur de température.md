@@ -376,7 +376,10 @@ flowchart LR
 
 📐 **Schéma draw.io — Cas d'utilisation :** [`schemas/5.6-cas-utilisation.drawio`](./schemas/5.6-cas-utilisation.drawio)
 
-![Cas d'utilisation](./schemas/apercus/5.6-cas-utilisation.png)
+**Dernières corrections appliquées :**
+- ✅ ESP32 déplacé à côté de "Envoie Mail" (côté droit du diagramme)
+- ✅ Flèche Admin → User modifiée en trait de triangle vide (`endArrow=open`)
+- ![Cas d'utilisation](./schemas/apercus/5.6-cas-utilisation.png)
 
 - « Gérer utilisateurs » et « Gérer seuils » **incluent** « S'authentifier ».
 - L'admin **hérite** de l'acteur User : il peut aussi consulter le dashboard.
