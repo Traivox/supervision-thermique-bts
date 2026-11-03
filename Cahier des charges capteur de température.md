@@ -110,17 +110,17 @@ Tous les schémas sont éditables dans [`schemas/`](./schemas/) (fichiers `.draw
 ```text
    SALLE 1 — COPERNIC (IRUP)                 SALLE 2 — FAURIEL (ISTP)
   ┌──────────────────────────────┐        ┌──────────────────────────────┐
-  │ DS18B20 #1 (T1) / #2 (T2)   │        │ DS18B20 #3 (T3) / #4 (T4)   │
-  │ Bus 1-Wire — GPIO16         │        │ Bus 1-Wire — GPIO16         │
-  │ pull-up 4,7 kΩ              │        │ pull-up 4,7 kΩ              │
-  │ ESP32-S3-ETH #1             │        │ ESP32-S3-ETH #2             │
-  │ IP fixe 192.168.1.11        │        │ IP fixe 192.168.1.12        │
+  │ DS18B20 #1 (T1) / #2 (T2)    │        │ DS18B20 #3 (T3) / #4 (T4)    │
+  │ Bus 1-Wire — GPIO16          │        │ Bus 1-Wire — GPIO16          │
+  │ pull-up 4,7 kΩ               │        │ pull-up 4,7 kΩ               │
+  │ ESP32-S3-ETH #1              │        │ ESP32-S3-ETH #2              │
+  │ IP fixe 192.168.1.11         │        │ IP fixe 192.168.1.12         │
   └──────────────┬───────────────┘        └──────────────┬───────────────┘
                  │ Ethernet                              │ Ethernet
                  ▼                                       ▼
   ┌──────────────────────────────┐        ┌──────────────────────────────┐
   │ Switch — salle machine       │        │ Switch — salle machine       │
-  │ Copernic                     │        │ Fauriel (1 baie serveur +   │
+  │ Copernic                     │        │ Fauriel (1 baie serveur +    │
   │ Firewall                     │        │ 2 baies switch)              │
   │ (cloisonnement VLAN)         │        └──────────────┬───────────────┘
   └──────────────┬───────────────┘                       │ Ethernet
